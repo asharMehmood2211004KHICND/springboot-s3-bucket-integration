@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 //import static com.sun.crypto.provider.AESCrypt.log;
 
@@ -54,8 +56,13 @@ public class StaffServiceImpl implements StaffService {
         File fileObbj =  convertMultiPartFileToFile(file);
         String fileName = System.currentTimeMillis()+file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName,fileName, fileObbj ));
+        //https://resourceloop-staff-profile-pictures.s3.amazonaws.com/1674989176998d.png
+        
+        String imageUrl = "https://"+ bucketName + ".s3.amazonaws.com/"+fileName;
+        System.out.println(imageUrl);   
         fileObbj.delete();
-        return "file uploaded : "+ fileName;
+        //return "file uploaded : "+ fileName;
+        return imageUrl;
     }
 
 
@@ -68,6 +75,13 @@ public class StaffServiceImpl implements StaffService {
             log.error("Error converting multipartFile to file", e);
         }
         return convertedFile;
+    }
+
+
+    @Override
+    public List<Staff> getStaff() {
+        // TODO Auto-generated method stub
+        return staffRepository.findAll();
     }
 
 

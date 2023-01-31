@@ -19,6 +19,9 @@ public class Staff {
     @Column( nullable = false)
     private String fullName;
 
+    @Column()
+    private String imageUrl;
 
+    
 
 }
